@@ -1,4 +1,4 @@
-extern kernel_main      ; ← THIS was the missing line causing the build error
+extern kernel_main
 
 MBALIGN  equ 1 << 0
 MEMINFO  equ 1 << 1
