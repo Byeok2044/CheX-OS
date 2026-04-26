@@ -1,4 +1,5 @@
-; Multiboot header - tells GRUB this is a kernel
+extern kernel_main      ; ← THIS was the missing line causing the build error
+
 MBALIGN  equ 1 << 0
 MEMINFO  equ 1 << 1
 FLAGS    equ MBALIGN | MEMINFO
@@ -14,12 +15,12 @@ align 4
 section .bss
 align 16
 stack_bottom:
-    resb 16384          ; 16KB stack
+    resb 16384
 stack_top:
 
 section .text
 global _start
 _start:
-    mov esp, stack_top  ; Set up stack
-    call kernel_main    ; Jump to kernel
-    hlt                 ; Halt if kernel returns
+    mov esp, stack_top
+    call kernel_main
+    hlt

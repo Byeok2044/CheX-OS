@@ -5,16 +5,15 @@ section .data
 
 section .text
 kernel_main:
-    ; VGA text mode - write directly to 0xB8000
     mov edi, 0xB8000
     mov esi, msg
-    mov ah, 0x0F        ; White on black
 
 .print_loop:
-    lodsb
+    lodsb               ; Load next char into al
     test al, al
     jz .done
-    stosw               ; Write char + attribute
+    mov ah, 0x0F        ; White on black (set AFTER lodsb, every iteration)
+    stosw               ; Write ax (al=char, ah=attr) to VGA buffer
     jmp .print_loop
 
 .done:

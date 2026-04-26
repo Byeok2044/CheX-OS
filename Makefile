@@ -15,10 +15,11 @@ kernel.bin: boot/boot.o kernel/kernel.o
 chex-os.iso: kernel.bin
 	mkdir -p iso/boot/grub
 	cp kernel.bin iso/boot/
+	cp ISO/Boot/Grub/grub.cfg iso/boot/grub/grub.cfg
 	grub-mkrescue -o $@ iso/
-
+	
 run: chex-os.iso
-	qemu-system-i386 -cdrom $
+	qemu-system-i386 -cdrom chex-os.iso
 
 clean:
 	rm -f **/*.o kernel.bin chex-os.iso
