@@ -1,6 +1,6 @@
-#include "VGA.h"
-#include "Keyboard.h"
-#include "Shell.h"
+#include "vga.h"
+#include "keyboard.h"
+#include "shell.h"
 
 void kernel_main(void) {
     vga_init();

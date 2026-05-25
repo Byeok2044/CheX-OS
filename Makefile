@@ -10,7 +10,10 @@ OBJS = boot/boot.o \
        kernel/shell.o \
        kernel/kernel.o
 
-all: chex-os.iso
+all: dirs chex-os.iso
+
+dirs:
+	mkdir -p boot kernel
 
 boot/boot.o: Boot/Boot.asm
 	$(ASM) $(ASMFLAGS) $< -o $@
@@ -44,3 +47,4 @@ run: chex-os.iso
 
 clean:
 	rm -f $(OBJS) kernel.bin chex-os.iso
+	rm -rf boot kernel iso

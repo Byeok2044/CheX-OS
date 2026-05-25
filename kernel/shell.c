@@ -1,13 +1,25 @@
-#include "Shell.h"
-#include "VGA.h"
-#include "Keyboard.h"
+#include "shell.h"
+#include "vga.h"
+#include "keyboard.h"
 
 #define INPUT_MAX 256
 
+/* Simple string equality — no string.h in a freestanding kernel */
+static int k_streq(const char *a, const char *b) {
+    while (*a && *b) {
+        if (*a != *b) return 0;
+        a++; b++;
+    }
+    return *a == *b;
+}
+
 static void shell_process(const char *cmd) {
-    if (cmd[0] == 'c' && cmd[1] == 'l' && cmd[2] == 'e'
-     && cmd[3] == 'a' && cmd[4] == 'r' && cmd[5] == '\0') {
+    if (k_streq(cmd, "clear")) {
         vga_clear();
+    } else if (k_streq(cmd, "help")) {
+        vga_set_color(VGA_COLOR_LIGHT_CYAN, VGA_COLOR_BLACK);
+        vga_puts("Commands: clear, help\n");
+        vga_set_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
     } else if (cmd[0] != '\0') {
         vga_set_color(VGA_COLOR_LIGHT_RED, VGA_COLOR_BLACK);
         vga_puts("Unknown command: ");

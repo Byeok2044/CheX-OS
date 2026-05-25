@@ -1,4 +1,4 @@
-#include "VGA.h"
+#include "vga.h"
 
 #define VGA_WIDTH    80
 #define VGA_HEIGHT   25
@@ -8,7 +8,7 @@
 #define VGA_CTRL_REG  0x3D4
 #define VGA_DATA_REG  0x3D5
 
-/* Provided by IO.asm */
+/* Provided by io.asm */
 extern void outb(uint16_t port, uint8_t val);
 extern uint8_t inb(uint16_t port);
 
@@ -22,7 +22,7 @@ static inline uint8_t make_attr(vga_color_t fg, vga_color_t bg) {
 }
 
 static inline uint16_t make_entry(char c, uint8_t attr) {
-    return (uint16_t)c | ((uint16_t)attr << 8);
+    return (uint16_t)(unsigned char)c | ((uint16_t)attr << 8);
 }
 
 static void hw_cursor_update(void) {
