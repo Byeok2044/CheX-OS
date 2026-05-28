@@ -3,34 +3,29 @@ ASMFLAGS = -f elf32
 CC       = gcc
 CFLAGS   = -m32 -ffreestanding -fno-stack-protector -nostdlib -Wall -Wextra
 
-OBJS = boot/boot.o \
-       kernel/io.o \
-       kernel/vga.o \
-       kernel/keyboard.o \
-       kernel/shell.o \
-       kernel/kernel.o
+OBJS = build/boot.o build/io.o build/vga.o build/keyboard.o build/shell.o build/kernel.o
 
-all: dirs chex-os.iso
+all: build/. chex-os.iso
 
-dirs:
-	mkdir -p boot kernel
+build/.:
+	mkdir -p build iso/boot/grub
 
-boot/boot.o: Boot/Boot.asm
+build/boot.o: Boot/Boot.asm
 	$(ASM) $(ASMFLAGS) $< -o $@
 
-kernel/io.o: kernel/io.asm
+build/io.o: kernel/io.asm
 	$(ASM) $(ASMFLAGS) $< -o $@
 
-kernel/kernel.o: kernel/kernel.c
+build/vga.o: kernel/vga.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-kernel/vga.o: kernel/vga.c
+build/keyboard.o: kernel/keyboard.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-kernel/keyboard.o: kernel/keyboard.c
+build/shell.o: kernel/shell.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-kernel/shell.o: kernel/shell.c
+build/kernel.o: kernel/kernel.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 kernel.bin: $(OBJS)
@@ -46,5 +41,4 @@ run: chex-os.iso
 	qemu-system-i386 -cdrom chex-os.iso
 
 clean:
-	rm -f $(OBJS) kernel.bin chex-os.iso
-	rm -rf boot kernel iso
+	rm -rf build iso kernel.bin chex-os.iso

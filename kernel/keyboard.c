@@ -6,7 +6,6 @@
 
 extern uint8_t inb(uint16_t port);
 
-/* US QWERTY scancode set 1 → ASCII (unshifted) */
 static const char sc_to_ascii[128] = {
     0,   0,  '1','2','3','4','5','6','7','8','9','0','-','=','\b',
     '\t','q','w','e','r','t','y','u','i','o','p','[',']','\n',
@@ -18,7 +17,6 @@ static const char sc_to_ascii[128] = {
     0,0,0,0,0,0,0,0,0
 };
 
-/* US QWERTY scancode set 1 → ASCII (shifted) */
 static const char sc_to_ascii_shift[128] = {
     0,   0,  '!','@','#','$','%','^','&','*','(',')','_','+','\b',
     '\t','Q','W','E','R','T','Y','U','I','O','P','{','}','\n',
@@ -37,25 +35,15 @@ static const char sc_to_ascii_shift[128] = {
 
 static int shift_held = 0;
 
-void keyboard_init(void) {
-    shift_held = 0;
-}
+void keyboard_init(void) { shift_held = 0; }
 
 char keyboard_getchar(void) {
     while (1) {
-        /* Wait for the output buffer to be full */
-        while (!(inb(KB_STATUS_PORT) & 0x01))
-            ;
-
+        while (!(inb(KB_STATUS_PORT) & 0x01));
         uint8_t sc = inb(KB_DATA_PORT);
-
-        /* Track shift state */
-        if (sc == SC_LSHIFT || sc == SC_RSHIFT)   { shift_held = 1; continue; }
+        if (sc == SC_LSHIFT || sc == SC_RSHIFT)    { shift_held = 1; continue; }
         if (sc == SC_LSHIFT_R || sc == SC_RSHIFT_R){ shift_held = 0; continue; }
-
-        /* Ignore key-release scancodes (bit 7 set) */
         if (sc & 0x80) continue;
-
         char c = shift_held ? sc_to_ascii_shift[sc] : sc_to_ascii[sc];
         if (c) return c;
     }

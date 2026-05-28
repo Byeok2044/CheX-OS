@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <stddef.h>
 
-/* VGA color codes */
 typedef enum {
     VGA_COLOR_BLACK         = 0,
     VGA_COLOR_BLUE          = 1,

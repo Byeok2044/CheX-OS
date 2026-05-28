@@ -21,10 +21,10 @@ stack_top:
 section .text
 global _start
 _start:
-    cli                  ; Disable interrupts — no IDT set up yet
-    mov esp, stack_top   ; Set up the stack
-    call kernel_main     ; Jump into the kernel
+    cli
+    mov esp, stack_top
+    call kernel_main
 
 .hang:
-    hlt                  ; Halt the CPU
-    jmp .hang            ; If an interrupt wakes it, halt again
+    hlt
+    jmp .hang

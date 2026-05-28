@@ -1,4 +1,4 @@
-; IO.asm — low-level port I/O helpers
+; io.asm — low-level port I/O helpers
 ; Exported as C-callable functions (cdecl, 32-bit)
 
 global outb

@@ -4,12 +4,8 @@
 
 #define INPUT_MAX 256
 
-/* Simple string equality — no string.h in a freestanding kernel */
 static int k_streq(const char *a, const char *b) {
-    while (*a && *b) {
-        if (*a != *b) return 0;
-        a++; b++;
-    }
+    while (*a && *b) { if (*a != *b) return 0; a++; b++; }
     return *a == *b;
 }
 
